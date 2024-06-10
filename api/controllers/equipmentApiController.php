@@ -27,7 +27,6 @@ class equipmentApiController extends ApiController
     {
         self::protectedMethod(4);
         $name = InputFilter::filterString(Request::current()->post()->value('name'));
-        $branch = InputFilter::filterString(Request::current()->post()->value('branch'));
         $sanitizingInterval = InputFilter::filterString(Request::current()->post()->value('sanitizing_interval'));
         $lastSanitizingDate = InputFilter::filterString(Request::current()->post()->value('last_sanitizing_date'));
 
@@ -43,7 +42,7 @@ class equipmentApiController extends ApiController
             (new ErrorApiController)->abort(5008);
         }
 
-        if ($this->equipment->addEquipment($name, $branch, $sanitizingInterval, $lastSanitizingDate) == 0) {
+        if ($this->equipment->addEquipment($name, $this->user->branch, $sanitizingInterval, $lastSanitizingDate) == 0) {
             (new ErrorApiController)->abort(511);
         }
 
@@ -117,13 +116,18 @@ class equipmentApiController extends ApiController
     public function get()
     {
         self::protectedMethod(0);
-        $branch = InputFilter::filterString(Request::current()->post()->value('branch'));
+        $type = InputFilter::filterString(Request::current()->post()->value('type'));
 
-        if (!InputFilter::checkNotEmpty($branch)) {
+        if (!InputFilter::checkNotEmpty($type)) {
             (new ErrorApiController)->abort(1005);
         }
 
-        $record = $this->equipment->selectequipment(['branch_id' => $branch]);
+        $typeTimeDelta = $type * 3600;
+
+        //SELECT * FROM equipment WHERE '2024-06-11 00:39:00' > DATE_ADD(last_sanitizing_date, INTERVAL sanitizing_interval * 3600 SECOND);
+        // date("Y-m-d H:i:s",
+
+        $record = $this->equipment->selectEquipment(['branch_id' => $this->user->branch]);
 
         if (!$record) {
             (new ErrorApiController)->abort(5007);

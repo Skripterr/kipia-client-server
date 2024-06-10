@@ -11,8 +11,9 @@
                         </div>
                         <div class="col">
                             <form id="select-accounts-form" class="form-inline float-right">
-                                <select name="branch" class="form-control form-control-sm mr-1" id="table-branches-selection">
-                                    <option value="-1">Не выбран филиал</option>
+                                <select name="type" class="form-control form-control-sm mr-1" id="table-type-selection">
+                                    <option value="1">Все оборудование</option>
+                                    <option value="2">Необходима сан. обработка</option>
                                 </select>
                                 <a class="btn btn-sm white addButton"><i class="fa fa-plus"></i></a>
                             </form>
@@ -64,11 +65,6 @@
                             <div class="input-group">
                                 <input name="last_sanitizing_date" id="last-sanitizing-date" class="form-control" placeholder="Дата последней сан. обработки" type="datetime-local" required="">
                             </div>
-                        </div>
-                        <div class="form-group col-sm-12 col-md-12">
-                            <label>Филиал</label>
-                            <select name="branch" class="form-control form-control-sm mr-1" id="branches-selection">
-                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn white p-x-md modalDismissButton" data-dismiss="modal">Отмена</button>
@@ -123,19 +119,8 @@
 
 <script>
     $(document).on('DOMContentLoaded', function() {
-        Application.request('branches', 'get').success((response) => {
-            if (response.error) {
-                showError(response.message);
-            } else {
-                response.data.forEach((element) => {
-                    $('#branches-selection, #table-branches-selection').append($('<option>', {
-                        value: element['id'],
-                        text: element['address']
-                    }))
-                });
-            }
-        });
-
+        Application.equipmentGet($('#table-type-selection').val());
+        
         Object.entries(Application.g_EquipmentTimeouts).forEach((element) => {
             $('#sanitizing-interval-selection, #table-sanitizing-interval-selection').append($('<option>', {
                 value: element[0],
@@ -144,8 +129,7 @@
         });
     });
 
-    $('#table-branches-selection').on('change', function() {
-        if (this.value == -1) return;
+    $('#table-type-selection').on('change', function() {
         Application.equipmentGet(this.value);
     });
 

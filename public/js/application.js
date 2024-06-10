@@ -452,8 +452,8 @@ Application = {
     },
 
 
-    equipmentGet: function (branch) {
-        Application.request('equipment', 'get', data = {'branch': branch}).success((response) => {
+    equipmentGet: function (type) {
+        Application.request('equipment', 'get', data = {'type': type}).success((response) => {
             if (response.error) {
                 showError(response.message);
             } else {
@@ -494,7 +494,7 @@ Application = {
             } else {
                 $("#modal-add").modal("hide");
                 showSuccess('Оборудование успешно добавлен!');
-                Application.equipmentGet($('#table-branches-selection').val());
+                Application.equipmentGet($('#table-type-selection').val());
             }
         });
     },
@@ -507,7 +507,7 @@ Application = {
             } else {
                 $("#modal-edit").modal("hide");
                 showSuccess('Изделие успешно изменено!');
-                Application.equipmentGet($('#table-branches-selection').val());
+                Application.equipmentGet($('#table-type-selection').val());
             }
         });
     },
@@ -518,7 +518,7 @@ Application = {
             } else {
                 $("#modal-edit").modal("hide");
                 showSuccess('Изделие успешно удалено!');
-                Application.equipmentGet($('#table-branches-selection').val());
+                Application.equipmentGet($('#table-type-selection').val());
             }
         });
     },
