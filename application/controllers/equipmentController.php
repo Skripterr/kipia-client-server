@@ -19,7 +19,7 @@ class equipmentController extends Controller
 
     public function index()
     {
-        self::protectedMethod(2);
+        self::protectedMethod(0);
         $this->view->render('equipment', 'template', [
             'title' => 'Оборудование',
         ]);

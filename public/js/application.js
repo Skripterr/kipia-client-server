@@ -9,6 +9,15 @@ Application = {
         3: 'Переработка',
     },
     g_BranchesData: {},
+    g_EquipmentTimeouts: {
+        1: '1 час',
+        4: '4 часа',
+        6: '6 часов',
+        12: '12 часов',
+        24: '1 день',
+        48: '2 дня',
+        168: '1 неделя',
+    },
     g_UserStatuses: {
         0: 'Стажёр',
         1: 'Уборщица',
@@ -438,6 +447,78 @@ Application = {
                 $("#modal-edit").modal("hide");
                 showSuccess('Изделие успешно удалено!');
                 Application.ingredientsGet($('#table-baking-selection').val());
+            }
+        });
+    },
+
+
+    equipmentGet: function (branch) {
+        Application.request('equipment', 'get', data = {'branch': branch}).success((response) => {
+            if (response.error) {
+                showError(response.message);
+            } else {
+                const $tbody = $('tbody');
+                $tbody.delay(500).fadeIn().empty();
+
+                response.data.forEach((element) => {
+                    const $row = $('<tr>').attr('data-equipment', JSON.stringify(element));
+
+                    const addCell = (text) => {
+                        const $cell = $('<td>').text(text);
+                        $row.append($cell);
+                    };
+
+                    const addHeadingCell = (text) => {
+                        const $cell = $('<td>').html('<h6>' + text + '</h6>');
+                        $row.append($cell);
+                    };
+
+                    addCell('#' + element['id']);
+                    addHeadingCell(element['name']);
+                    addHeadingCell(Application.g_EquipmentTimeouts[element['sanitizing_interval']]);
+                    addHeadingCell(element['last_sanitizing_date']);
+
+                    const $manageButton = $('<a class="btn btn-fw white manageButton">').text('Управление');
+                    const $manageCell = $('<td>').append($manageButton);
+                    $row.append($manageCell);
+
+                    $tbody.append($row).hide().delay(500).fadeIn();
+                });
+            }
+        });
+    },
+    equipmentAdd: function () {
+        Application.request('equipment', 'add', data = Application.prepareDataForRequest($('#add-modal-form'))).success((response) => {
+            if (response.error) {
+                showError(response.message);
+            } else {
+                $("#modal-add").modal("hide");
+                showSuccess('Оборудование успешно добавлен!');
+                Application.equipmentGet($('#table-branches-selection').val());
+            }
+        });
+    },
+    equipmentEdit: function (id) {
+        let data = Application.prepareDataForRequest($('#edit-modal-form'));
+        data['id'] = id;
+        Application.request('equipment', 'edit', data = data).success((response) => {
+            if (response.error) {
+                showError(response.message);
+            } else {
+                $("#modal-edit").modal("hide");
+                showSuccess('Изделие успешно изменено!');
+                Application.equipmentGet($('#table-branches-selection').val());
+            }
+        });
+    },
+    equipmentDelete: function (id) { 
+        Application.request('equipment', 'delete', data = {'id': id}).success((response) => {
+            if (response.error) {
+                showError(response.message);
+            } else {
+                $("#modal-edit").modal("hide");
+                showSuccess('Изделие успешно удалено!');
+                Application.equipmentGet($('#table-branches-selection').val());
             }
         });
     },

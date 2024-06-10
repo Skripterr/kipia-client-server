@@ -11,12 +11,12 @@ class IngredientsModel extends Model
         parent::__construct();
     }
 
-    public function addIngredients($name, $weight, $baking_id)
+    public function addIngredients($name, $weight, $bakingId)
     {
         return $this->database->sql(
             "INSERT INTO `ingredients`(`name`, `weight`, `baking_id`) 
             VALUES (:name, :weight, :baking_id)",
-            ['name' => $name, 'weight' => $weight, 'baking_id' => $baking_id]
+            ['name' => $name, 'weight' => $weight, 'baking_id' => $bakingId]
         )->rowCount();
     }
 

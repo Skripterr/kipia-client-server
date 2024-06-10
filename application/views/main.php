@@ -4,6 +4,7 @@
             <h2 class="mb-4">Выберите нужную страницу:</h2>
             <h6><a class="" href="/users">Пользователи</a></h6>
             <h6><a class="" href="/branches">Филиалы</a></h6>
+            <h6><a class=""  href="/equipment">Оборудование</a></h6>
             <h6><a class="" href="/baking">Изделия</a></h6>
             <h6><a class="" href="/ingredients">Ингредиенты</a></h6>
         </div>

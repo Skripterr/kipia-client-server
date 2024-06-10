@@ -101,13 +101,13 @@ class ingredientsApiController extends ApiController
     {
         self::protectedMethod(2);
 
-        $baking_id = InputFilter::filterString(Request::current()->post()->value('baking_id'));
+        $bakingId = InputFilter::filterString(Request::current()->post()->value('baking_id'));
 
-        if (!InputFilter::checkNotEmpty($baking_id)) {
+        if (!InputFilter::checkNotEmpty($bakingId)) {
             (new ErrorApiController)->abort(1005);
         }
 
-        $record = $this->ingredients->selectIngredients(['baking_id' => $baking_id]);
+        $record = $this->ingredients->selectIngredients(['baking_id' => $bakingId]);
 
         if (!$record) {
             (new ErrorApiController)->abort(4007);

@@ -30,9 +30,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Выберите изделие.</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -125,9 +122,6 @@
             if (response.error) {
                 showError(response.message);
             } else {
-                const $tbody = $('tbody');
-                $tbody.delay(500).fadeIn().empty();
-
                 response.data.forEach((element) => {
                     $('#baking-selection, #table-baking-selection').append($('<option>', {
                         value: element['id'],
@@ -139,8 +133,9 @@
     });
 
     $('#table-baking-selection').on('change', function() {
-            Application.ingredientsGet(this.value);
-        });
+        if (this.value == -1) return;
+        Application.ingredientsGet(this.value);
+    });
 
     $(".addButton").click(function() {
         $('#modal-add').modal('show');

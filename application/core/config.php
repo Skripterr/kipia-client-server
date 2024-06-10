@@ -19,7 +19,7 @@ class Config
     const DB_NAME = 'bakery';
 
 
-    const PROJECT_TITLE = 'BAKERYME ' . (self::DEBUG ? '(dev mode)' : '');
+    const PROJECT_TITLE = 'KIP&A Учет ' . (self::DEBUG ? '(dev mode)' : '');
 
     const JWT_KEY = 'kipiaproject';
     const JWT_EXPIRE_TIME = 86000 * 3;

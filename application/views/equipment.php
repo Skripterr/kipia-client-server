@@ -11,7 +11,7 @@
                         </div>
                         <div class="col">
                             <form id="select-accounts-form" class="form-inline float-right">
-                                <select name="branch" class="form-control form-control-sm mr-1" id="table-branch-selection">
+                                <select name="branch" class="form-control form-control-sm mr-1" id="table-branches-selection">
                                     <option value="-1">Не выбран филиал</option>
                                 </select>
                                 <a class="btn btn-sm white addButton"><i class="fa fa-plus"></i></a>
@@ -27,12 +27,10 @@
                                     <th>Название</th>
                                     <th>Интервал сан. обработки</th>
                                     <th>Последняя сан. обработка</th>
+                                    <th>Управление</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Выберите филиал.</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -52,14 +50,13 @@
                         <div class="form-group col-sm-12 col-md-12">
                             <label>Название оборудования</label>
                             <div class="input-group">
-                                <input name="name" id="name" class="form-control" placeholder="Название ингредиента" type="text" required="">
+                                <input name="name" id="name" class="form-control" placeholder="Название оборудования" type="text" required="">
                             </div>
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
                             <label>Интервал сан. обработки</label>
                             <div class="input-group">
-                                <select name="sanitizing_interval" class="form-control" id="sanitizing-interval-selection">
-                                </select>
+                                <select name="sanitizing_interval" class="form-control" id="sanitizing-interval-selection"></select>
                             </div>
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
@@ -67,6 +64,11 @@
                             <div class="input-group">
                                 <input name="last_sanitizing_date" id="last-sanitizing-date" class="form-control" placeholder="Дата последней сан. обработки" type="datetime-local" required="">
                             </div>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12">
+                            <label>Филиал</label>
+                            <select name="branch" class="form-control form-control-sm mr-1" id="branches-selection">
+                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn white p-x-md modalDismissButton" data-dismiss="modal">Отмена</button>
@@ -82,7 +84,7 @@
     <div class="modal-dialog">
         <div class="modal-content dark lt">
             <div class="modal-header">
-                <h5 class="modal-title">Настройки ингредиента</h5>
+                <h5 class="modal-title">Настройки оборудования</h5>
             </div>
             <div class="modal-body p-lg">
                 <form id="edit-modal-form">
@@ -90,20 +92,20 @@
                         <div class="form-group col-sm-12 col-md-12">
                             <label>Название оборудования</label>
                             <div class="input-group">
-                                <input name="name" id="name" class="form-control" placeholder="Название ингредиента" type="text" required="">
+                                <input name="name" id="name" class="form-control" placeholder="Название оборудования" type="text" required="">
                             </div>
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
                             <label>Интервал сан. обработки</label>
                             <div class="input-group">
-                                <select name="sanitizing_interval" class="form-control" id="sanitizing-interval-selection">
+                                <select name="sanitizing_interval" class="form-control" id="table-sanitizing-interval-selection">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
                             <label>Последняя сан. обработка</label>
                             <div class="input-group">
-                                <input name="last_sanitizing_date" id="last-sanitizing-date" class="form-control" placeholder="Дата последней сан. обработки" type="datetime-local" required="">
+                                <input name="last_sanitizing_date" id="edit-last-sanitizing-date" class="form-control" placeholder="Дата последней сан. обработки" type="datetime-local" required="">
                             </div>
                         </div>
                 </form>
@@ -125,21 +127,26 @@
             if (response.error) {
                 showError(response.message);
             } else {
-                const $tbody = $('tbody');
-                $tbody.delay(500).fadeIn().empty();
-
                 response.data.forEach((element) => {
                     $('#branches-selection, #table-branches-selection').append($('<option>', {
                         value: element['id'],
-                        text: element['name']
+                        text: element['address']
                     }))
                 });
             }
         });
+
+        Object.entries(Application.g_EquipmentTimeouts).forEach((element) => {
+            $('#sanitizing-interval-selection, #table-sanitizing-interval-selection').append($('<option>', {
+                value: element[0],
+                text: element[1]
+            }))
+        });
     });
 
-    $('#table-baking-selection').on('change', function() {
-        Application.ingredientsGet(this.value);
+    $('#table-branches-selection').on('change', function() {
+        if (this.value == -1) return;
+        Application.equipmentGet(this.value);
     });
 
     $(".addButton").click(function() {
@@ -147,15 +154,15 @@
     });
 
     $(".deleteButton").on('click', function() {
-        Application.ingredientsDelete($('#edit-modal-form').data('ingredients')['id']);
+        Application.equipmentDelete($('#edit-modal-form').data('equipment')['id']);
     });
 
     $(".saveButton").on('click', function() {
-        Application.ingredientsEdit($('#edit-modal-form').data('ingredients')['id']);
+        Application.equipmentEdit($('#edit-modal-form').data('equipment')['id']);
     });
 
     $('#add-modal-form').on('submit', function() {
-        Application.ingredientsAdd();
+        Application.equipmentAdd();
         return false;
     });
 
@@ -164,10 +171,16 @@
     });
 
     $(document).on('click', ".manageButton", function() {
-        const ingredients = $(this).closest('tr').data('ingredients');
-        $('#edit-modal-form input[name="name"]').val(ingredients.name);
-        $('#edit-modal-form input[name="weight"]').val(ingredients.weight);
-        $('#edit-modal-form').data('ingredients', ingredients);
+        const equipment = $(this).closest('tr').data('equipment');
+        $('#edit-modal-form input[name="name"]').val(equipment.name);
+        $('#edit-modal-form select[name="sanitizing_interval"]').val(equipment.sanitizing_interval);
+        const [datePart, timePart] = equipment.last_sanitizing_date.split(' ');
+        const dateObject = new Date(`${datePart}T${timePart}`);
+        dateObject.setHours(dateObject.getHours() + 4);
+        const datetimeLocalString = dateObject.toISOString().slice(0, -5);
+        console.log(datetimeLocalString);
+        $('#edit-modal-form input[name="last_sanitizing_date"]').val(datetimeLocalString);
+        $('#edit-modal-form').data('equipment', equipment);
         $('#modal-edit').modal('show');
     });
 </script>

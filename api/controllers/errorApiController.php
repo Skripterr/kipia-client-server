@@ -33,7 +33,9 @@ class ErrorApiController extends Controller
         1007 => ['Users with this data not found.', 'Пользователи с указанными данными не найдены.'],
         2007 => ['Branches with this data not found.', 'Филиалы с указанными данными не найдены.'],
         3007 => ['Products with this data not found.', 'Изделия с указанными данными не найдены.'],
-        4007 => ['ingredients with this data not found.', 'Ингредиенты с указанными данными не найдены.'],
+        4007 => ['Ingredients with this data not found.', 'Ингредиенты с указанными данными не найдены.'],
+        5007 => ['Equipment with this data not found.', 'Оборудование с указанными данными не найдены.'],
+        5008 => ['Incorrect datetime format.', 'Неверный формат метки времени.'],
     ];
 
     public function __construct()

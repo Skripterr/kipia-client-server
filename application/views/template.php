@@ -64,6 +64,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/users">Пользователи</a>
                                 <a class="dropdown-item" href="/branches">Филиалы</a>
+                                <a class="dropdown-item" href="/equipment">Оборудование</a>
                                 <a class="dropdown-item" href="/baking">Изделия</a>
                                 <a class="dropdown-item" href="/ingredients">Ингредиенты</a>
                                 <div class="dropdown-divider"></div>

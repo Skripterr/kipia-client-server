@@ -11,18 +11,18 @@ class EquipmentModel extends Model
         parent::__construct();
     }
 
-    public function addIngredients($name, $weight, $baking_id)
+    public function addEquipment($name, $branchId, $sanitizingInterval, $lastSanitizingDate)
     {
         return $this->database->sql(
-            "INSERT INTO `equipment` (`name`, `weight`, `baking_id`) 
-            VALUES (:name, :weight, :baking_id)",
-            ['name' => $name, 'weight' => $weight, 'baking_id' => $baking_id]
+            "INSERT INTO `equipment`(`name`, `branch_id`, `sanitizing_interval`, `last_sanitizing_date`) 
+            VALUES (:name, :branch_id, :sanitizing_interval, :last_sanitizing_date)",
+            ['name' => $name, 'branch_id' => $branchId, 'sanitizing_interval' => $sanitizingInterval, 'last_sanitizing_date' => $lastSanitizingDate]
         )->rowCount();
     }
 
-    public function updateIngredients($data, $conditions)
+    public function updateEquipment($data, $conditions)
     {
-        $sql = "UPDATE `ingredients` SET ";
+        $sql = "UPDATE `equipment` SET ";
         $updates = [];
         $formedConditions = [];
 
@@ -39,9 +39,9 @@ class EquipmentModel extends Model
         return $this->database->sql($sql, array_merge($data, $formedConditions))->rowCount();
     }
 
-    public function selectIngredients($conditions)
+    public function selectEquipment($conditions)
     {
-        $sql = "SELECT * from `ingredients`";
+        $sql = "SELECT * from `equipment`";
         $formedConditions = [];
 
         if (!empty($conditions)) {
@@ -51,9 +51,9 @@ class EquipmentModel extends Model
         return $this->database->getRows($sql, $formedConditions);
     }
 
-    public function deleteIngredients($conditions)
+    public function deleteEquipment($conditions)
     {
-        $sql = "DELETE from `ingredients`";
+        $sql = "DELETE from `equipment`";
         $formedConditions = [];
 
         if (!empty($conditions)) {
