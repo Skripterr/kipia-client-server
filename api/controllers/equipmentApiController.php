@@ -34,11 +34,9 @@ class equipmentApiController extends ApiController
             (new ErrorApiController)->abort(1005);
         }
 
-        try 
-        {
+        try {
             $lastSanitizingDate = date("Y-m-d H:i:s", strtotime($lastSanitizingDate));
-        } catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             (new ErrorApiController)->abort(5008);
         }
 
@@ -91,11 +89,9 @@ class equipmentApiController extends ApiController
             (new ErrorApiController)->abort(1005);
         }
 
-        try 
-        {
+        try {
             $lastSanitizingDate = date("Y-m-d H:i:s", strtotime($lastSanitizingDate));
-        } catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             (new ErrorApiController)->abort(5008);
         }
 
@@ -116,18 +112,20 @@ class equipmentApiController extends ApiController
     public function get()
     {
         self::protectedMethod(0);
+        $databaseRequest = ['branch_id' => $this->user->branch];
         $type = InputFilter::filterString(Request::current()->post()->value('type'));
 
         if (!InputFilter::checkNotEmpty($type)) {
             (new ErrorApiController)->abort(1005);
         }
 
-        $typeTimeDelta = $type * 3600;
+        if ($type == 2) {
+            $typeTimeDelta = $type * 3600;
+            // Somehow should be added to request
+            $databaseRequest['\'' . date("Y-m-d H:i:s") . '\' >'] = 'DATE_ADD(last_sanitizing_date, INTERVAL sanitizing_interval * 3600 SECOND)';
+        }
 
-        //SELECT * FROM equipment WHERE '2024-06-11 00:39:00' > DATE_ADD(last_sanitizing_date, INTERVAL sanitizing_interval * 3600 SECOND);
-        // date("Y-m-d H:i:s",
-
-        $record = $this->equipment->selectEquipment(['branch_id' => $this->user->branch]);
+        $record = $this->equipment->selectEquipment($databaseRequest);
 
         if (!$record) {
             (new ErrorApiController)->abort(5007);

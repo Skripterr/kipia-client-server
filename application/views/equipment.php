@@ -120,7 +120,7 @@
 <script>
     $(document).on('DOMContentLoaded', function() {
         Application.equipmentGet($('#table-type-selection').val());
-        
+
         Object.entries(Application.g_EquipmentTimeouts).forEach((element) => {
             $('#sanitizing-interval-selection, #table-sanitizing-interval-selection').append($('<option>', {
                 value: element[0],
@@ -158,11 +158,12 @@
         const equipment = $(this).closest('tr').data('equipment');
         $('#edit-modal-form input[name="name"]').val(equipment.name);
         $('#edit-modal-form select[name="sanitizing_interval"]').val(equipment.sanitizing_interval);
+
         const [datePart, timePart] = equipment.last_sanitizing_date.split(' ');
         const dateObject = new Date(`${datePart}T${timePart}`);
         dateObject.setHours(dateObject.getHours() + 4);
         const datetimeLocalString = dateObject.toISOString().slice(0, -5);
-        console.log(datetimeLocalString);
+        
         $('#edit-modal-form input[name="last_sanitizing_date"]').val(datetimeLocalString);
         $('#edit-modal-form').data('equipment', equipment);
         $('#modal-edit').modal('show');
