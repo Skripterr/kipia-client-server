@@ -91,14 +91,19 @@
                 <div class="form-group col-sm-12 col-md-12">
                     <div class="row">
                         <div class="col">
-                        <button type="submit" class="btn btn-block btn-outline b-primary text-primary p-x-md printUserButton">
-                        <i class="fa fa-print" aria-hidden="true"></i> Персонал
-                    </button>
+                            <button type="submit" class="btn btn-block btn-outline b-primary text-primary p-x-md printUserButton">
+                                <i class="fa fa-print" aria-hidden="true"></i> Персонал
+                            </button>
                         </div>
                         <div class="col">
-                        <button type="submit" class="btn btn-block btn-outline b-primary text-primary p-x-md printBakingButton">
-                        <i class="fa fa-print" aria-hidden="true"></i> Изделия
-                        </button>
+                            <button type="submit" class="btn btn-block btn-outline b-primary text-primary p-x-md printEquipmentButton">
+                                <i class="fa fa-print" aria-hidden="true"></i> Оборудование
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-block btn-outline b-primary text-primary p-x-md printBakingButton">
+                                <i class="fa fa-print" aria-hidden="true"></i> Изделия
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -144,6 +149,12 @@
             let branch = $('#edit-modal-form').data('branch');
             branch.status = Application.g_BranchStatuses[branch.status];
             Printer.createWindow(Printer.generateBakingReport(branch, response.data));
+        });
+    });
+
+    $(".printEquipmentButton").on('click', function() {
+        Application.request('equipment', 'get', data = {'type': 1}).success((response) => {
+            Printer.createWindow(Printer.generateEquipmentReport('все оборудование', response.data));
         });
     });
 

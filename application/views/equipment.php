@@ -11,6 +11,7 @@
                         </div>
                         <div class="col">
                             <form id="select-accounts-form" class="form-inline float-right">
+                                <a class="btn btn-sm white printEquipmentButton mr-1"><i class='fas'>&#xf02f;</i> Оборудование</a>
                                 <select name="type" class="form-control form-control-sm mr-1" id="table-type-selection">
                                     <option value="1">Все оборудование</option>
                                     <option value="2">Необходима сан. обработка</option>
@@ -150,6 +151,14 @@
         return false;
     });
 
+    $(".printEquipmentButton").on('click', function() {
+        Application.request('equipment', 'get', data = {
+            'type': $('#table-type-selection').val()
+        }).success((response) => {
+            Printer.createWindow(Printer.generateEquipmentReport($('#table-type-selection option:selected').text().toLowerCase(), response.data));
+        });
+    });
+
     $(document).on('hidden.bs.modal', function() {
         $("input").val("").change();
     });
@@ -163,7 +172,7 @@
         const dateObject = new Date(`${datePart}T${timePart}`);
         dateObject.setHours(dateObject.getHours() + 4);
         const datetimeLocalString = dateObject.toISOString().slice(0, -5);
-        
+
         $('#edit-modal-form input[name="last_sanitizing_date"]').val(datetimeLocalString);
         $('#edit-modal-form').data('equipment', equipment);
         $('#modal-edit').modal('show');
