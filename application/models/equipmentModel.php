@@ -48,8 +48,6 @@ class EquipmentModel extends Model
             [$sql, $formedConditions] = $this->database->formQuery($sql, $conditions);
         }
 
-        var_dump($sql, $formedConditions);
-
         return $this->database->getRows($sql, $formedConditions);
     }
 

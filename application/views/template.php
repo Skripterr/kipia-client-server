@@ -22,9 +22,9 @@
     <link rel="stylesheet" href="/public/css/styles.css?v=<?= $frontCacheControl ?>">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.5/js.cookie.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="/public/js/izitoast.js?v=<?= $frontCacheControl ?>"></script>
     <script src="/public/js/global.js?v=<?= $frontCacheControl ?>"></script>
@@ -66,7 +66,7 @@
                                 <a class="dropdown-item" href="/branches">Филиалы</a>
                                 <a class="dropdown-item" href="/equipment">Оборудование</a>
                                 <a class="dropdown-item" href="/baking">Изделия</a>
-                                <a class="dropdown-item" href="/ingredients">Ингредиенты</a>
+                                <a class="dropdown-item d-none" href="/ingredients">Ингредиенты</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item modalLogoutButton" href="/logout">Выйти</a>
                             </div>

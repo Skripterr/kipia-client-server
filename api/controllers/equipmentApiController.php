@@ -120,12 +120,13 @@ class equipmentApiController extends ApiController
         }
 
         if ($type == 2) {
-            $typeTimeDelta = $type * 3600;
-            // Somehow should be added to request
-            $databaseRequest['\'' . date("Y-m-d H:i:s") . '\' >'] = 'DATE_ADD(last_sanitizing_date, INTERVAL sanitizing_interval * 3600 SECOND)';
+            $record = $this->equipment->database->getRows("SELECT * from `equipment` WHERE branch_id = :branch_id AND :time_delta > DATE_ADD(last_sanitizing_date, INTERVAL sanitizing_interval * 3600 SECOND) ", [
+                'branch_id' => $this->user->branch,
+                'time_delta' => date("Y-m-d H:i:s")
+            ]); 
+        } else {
+            $record = $this->equipment->selectEquipment($databaseRequest);
         }
-
-        $record = $this->equipment->selectEquipment($databaseRequest);
 
         if (!$record) {
             (new ErrorApiController)->abort(5007);

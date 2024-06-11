@@ -15,7 +15,7 @@ class Config
     const CHARSET = 'utf8';
     const DB_PREFIX = '';
     const DB_USER = 'root';
-    const DB_PASSWORD = '';
+    const DB_PASSWORD = 'root';
     const DB_NAME = 'bakery';
 
 
